@@ -17,11 +17,6 @@ spring:
     properties:
       hibernate:
         dialect: "org.hibernate.dialect.MySQLDialect"
-      jakarta:  #https://hibernate.atlassian.net/browse/HHH-15827
-        persistence:
-          sharedCache:
-            #ALL | NONE | ENABLE_SELECTIVE | DISABLE_SELECTIVE | UNSPECIFIED
-            mode: UNSPECIFIED
     show_sql: true
     format_sql: true
     hibernate:
