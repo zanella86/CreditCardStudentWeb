@@ -22,7 +22,7 @@
 - IntelliJ IDEA Community Edition (2022.2.1)
 - MySQL Workbench 8.0 CE
 - Spring Framework 3.0.4 (Java 17+)
-<!-- - Swagger -->
+- Swagger
 
 ---
 
@@ -52,6 +52,14 @@
 - Crie um *database schema* no MySQL chamado `credit-card-integrator`
 
 ![MySQL-Create-Schema](docs/mysql-schema-create.PNG)
+
+## Aplicação
+
+### Swagger
+
+Documentação disponível em: http://localhost:8080/creditcard-integrator/swagger-ui/index.html#/
+
+![Swagger - Home](docs/swagger.PNG)
 
 ---
 
