@@ -67,3 +67,5 @@ Documentação disponível em: http://localhost:8080/creditcard-integrator/swagg
 
 - [Prof.º Fabio Tadashi - Travel](https://github.com/fabiotadashi/1SCJR-travel)
 - [Spring Initializr](https://start.spring.io/;)
+- [StackOverFlow - How to solve deprecation warning of JobBuilderFactory and StepBuilderFactory](https://stackoverflow.com/questions/75508267/how-to-solve-deprecation-warning-of-jobbuilderfactory-and-stepbuilderfactory)
+  - [Spring Batch 5.0 Migration Guide](https://github.com/spring-projects/spring-batch/wiki/Spring-Batch-5.0-Migration-Guide)

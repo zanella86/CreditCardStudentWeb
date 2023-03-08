@@ -1,10 +1,8 @@
-# Server
 server:
   port: 8080
   servlet:
     contextPath: "/creditcard-integrator"
 
-# Database
 spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/credit-card-integrator?serverTimezone=UTC"
@@ -21,7 +19,21 @@ spring:
     format_sql: true
     hibernate:
       ddl-auto: update
-
+  batch:
+    jdbc:
+      #initialize-schema: always
+      platform: mysql
+    job:
+      enabled: false
   springdoc:
     swagger-ui:
       path: /swagger-ui.html
+
+integration:
+  file:
+    students:
+      #source: src/test/resources/lista_alunos.txt
+      source: lista_alunos.txt
+      delimiter: \t
+      load: true   # Make true to load initial batch load from students
+      chunk-size: 1000
