@@ -27,4 +27,7 @@ public class StudentEntity implements Serializable {
     @Column
     private String name;
 
+    @Column
+    private String cardCode;
+
 }

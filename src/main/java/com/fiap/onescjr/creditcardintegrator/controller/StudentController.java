@@ -64,7 +64,7 @@ public class StudentController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<StudentDTO> list() {;
+    public List<StudentDTO> list() {
         if(studentService.list().isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         return studentService.list();
     }

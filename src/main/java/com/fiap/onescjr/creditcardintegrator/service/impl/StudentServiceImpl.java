@@ -1,7 +1,6 @@
 package com.fiap.onescjr.creditcardintegrator.service.impl;
 
 import com.fiap.onescjr.creditcardintegrator.dto.StudentDTO;
-import com.fiap.onescjr.creditcardintegrator.entity.StudentEntity;
 import com.fiap.onescjr.creditcardintegrator.mapper.StudentMapper;
 import com.fiap.onescjr.creditcardintegrator.repository.StudentRepository;
 import com.fiap.onescjr.creditcardintegrator.service.StudentService;
