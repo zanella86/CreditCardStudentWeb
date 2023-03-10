@@ -12,4 +12,6 @@ public class MapperConfig {
         return new StudentMapper();
     }
 
+    //TODO: Considerar injetar o "TransactionMapper"
+
 }

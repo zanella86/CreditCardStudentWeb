@@ -9,16 +9,17 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "TB_STUDENT", catalog = JpaConfig.CATALOG)
-public class StudentEntity implements Serializable {
+@Table(name = "TB_TRANSACTION", catalog = JpaConfig.CATALOG)
+public class TransactionEntity implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -27,12 +28,15 @@ public class StudentEntity implements Serializable {
     private Long id;
 
     @Column
-    private String name;
+    private String purchaseDescription;
 
     @Column
-    private String cardCode;
+    private BigDecimal value;
 
-    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="student")
-    private Set<TransactionEntity> transactions = new HashSet<>();
+    @Column
+    private LocalDateTime date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_student")
+    private StudentEntity student;
 }
