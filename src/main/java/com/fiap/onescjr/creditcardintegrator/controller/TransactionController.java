@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(name = "transaction")
+@RequestMapping("transaction")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -26,7 +26,7 @@ public class TransactionController {
         return transactionService.insert(transactionDTO);
     }
 
-   /* @PutMapping("")
+    /*@PutMapping("")
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO put(@RequestBody TransactionDTO transactionDTO) {
         TransactionDTO transactionDTOUpdated;
@@ -36,9 +36,9 @@ public class TransactionController {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         return transactionDTOUpdated;
-    }
-*/
-    /*@PatchMapping("{id}")
+    }*/
+
+    @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO patch(@PathVariable Long id, @RequestBody TransactionDTO transactionDTO) {
         TransactionDTO transactionDTOUpdated;
@@ -48,7 +48,7 @@ public class TransactionController {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         return transactionDTOUpdated;
-    }*/
+    }
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.FOUND)
