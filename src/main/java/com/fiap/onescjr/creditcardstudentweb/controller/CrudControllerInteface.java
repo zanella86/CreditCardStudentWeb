@@ -1,4 +1,4 @@
-package com.fiap.onescjr.creditcardintegrator.controller;
+package com.fiap.onescjr.creditcardstudentweb.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

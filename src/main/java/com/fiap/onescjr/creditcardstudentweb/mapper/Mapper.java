@@ -1,4 +1,4 @@
-package com.fiap.onescjr.creditcardintegrator.mapper;
+package com.fiap.onescjr.creditcardstudentweb.mapper;
 
 public interface Mapper <D, E>{
     E convertDTOToEntity(D dto);

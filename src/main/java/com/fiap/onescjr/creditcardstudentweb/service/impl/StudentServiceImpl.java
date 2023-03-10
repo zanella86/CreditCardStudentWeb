@@ -1,9 +1,9 @@
-package com.fiap.onescjr.creditcardintegrator.service.impl;
+package com.fiap.onescjr.creditcardstudentweb.service.impl;
 
-import com.fiap.onescjr.creditcardintegrator.dto.StudentDTO;
-import com.fiap.onescjr.creditcardintegrator.mapper.StudentMapper;
-import com.fiap.onescjr.creditcardintegrator.repository.StudentRepository;
-import com.fiap.onescjr.creditcardintegrator.service.StudentService;
+import com.fiap.onescjr.creditcardstudentweb.dto.StudentDTO;
+import com.fiap.onescjr.creditcardstudentweb.mapper.StudentMapper;
+import com.fiap.onescjr.creditcardstudentweb.repository.StudentRepository;
+import com.fiap.onescjr.creditcardstudentweb.service.StudentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.fiap.onescjr.creditcardintegrator.entity;
+package com.fiap.onescjr.creditcardstudentweb.entity;
 
-import com.fiap.onescjr.creditcardintegrator.config.JpaConfig;
+import com.fiap.onescjr.creditcardstudentweb.config.JpaConfig;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

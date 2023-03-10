@@ -1,4 +1,4 @@
-package com.fiap.onescjr.creditcardintegrator.dto;
+package com.fiap.onescjr.creditcardstudentweb.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

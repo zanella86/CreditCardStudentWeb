@@ -1,6 +1,6 @@
-package com.fiap.onescjr.creditcardintegrator.service;
+package com.fiap.onescjr.creditcardstudentweb.service;
 
-import com.fiap.onescjr.creditcardintegrator.dto.StudentDTO;
+import com.fiap.onescjr.creditcardstudentweb.dto.StudentDTO;
 import jakarta.transaction.Transactional;
 
 import java.util.List;

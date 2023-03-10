@@ -1,6 +1,6 @@
-package com.fiap.onescjr.creditcardintegrator.repository;
+package com.fiap.onescjr.creditcardstudentweb.repository;
 
-import com.fiap.onescjr.creditcardintegrator.entity.StudentEntity;
+import com.fiap.onescjr.creditcardstudentweb.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

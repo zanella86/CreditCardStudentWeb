@@ -1,4 +1,4 @@
-package com.fiap.onescjr.creditcardintegrator;
+package com.fiap.onescjr.creditcardstudentweb;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

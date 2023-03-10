@@ -66,7 +66,7 @@ Adicione os parâmetros para conexão:
 
 > MYSQL_USERNAME=meu_usuario;MYSQL_PASSWORD=minha-senha
 
-<!-- ![Intellij-bootRun-Arguments](docs/intellij-bootrun-arguments.PNG) -->
+![Intellij-bootRun-Arguments](docs/intellij-bootrun-arguments.PNG)
 
 ### Swagger
 

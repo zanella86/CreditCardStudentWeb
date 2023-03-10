@@ -1,7 +1,7 @@
-package com.fiap.onescjr.creditcardintegrator.mapper;
+package com.fiap.onescjr.creditcardstudentweb.mapper;
 
-import com.fiap.onescjr.creditcardintegrator.dto.StudentDTO;
-import com.fiap.onescjr.creditcardintegrator.entity.StudentEntity;
+import com.fiap.onescjr.creditcardstudentweb.dto.StudentDTO;
+import com.fiap.onescjr.creditcardstudentweb.entity.StudentEntity;
 
 public class StudentMapper implements Mapper<StudentDTO, StudentEntity> {
 

@@ -1,7 +1,7 @@
-package com.fiap.onescjr.creditcardintegrator.controller;
+package com.fiap.onescjr.creditcardstudentweb.controller;
 
-import com.fiap.onescjr.creditcardintegrator.dto.StudentDTO;
-import com.fiap.onescjr.creditcardintegrator.service.StudentService;
+import com.fiap.onescjr.creditcardstudentweb.dto.StudentDTO;
+import com.fiap.onescjr.creditcardstudentweb.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

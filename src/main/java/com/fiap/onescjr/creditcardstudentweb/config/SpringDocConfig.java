@@ -1,4 +1,4 @@
-package com.fiap.onescjr.creditcardintegrator.config;
+package com.fiap.onescjr.creditcardstudentweb.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -11,7 +11,7 @@ public class SpringDocConfig {
 
     @Bean
     public OpenAPI apiInfo() {
-        return new OpenAPI().info(new Info().title("Spring - CreditCardIntegrator").version("1.0.0"));
+        return new OpenAPI().info(new Info().title("Spring - CreditCardStudentWeb").version("1.0.0"));
     }
 
     @Bean

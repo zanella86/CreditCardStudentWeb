@@ -1,4 +1,4 @@
-package com.fiap.onescjr.creditcardintegrator.config;
+package com.fiap.onescjr.creditcardstudentweb.config;
 
 import org.springframework.context.annotation.Configuration;
 

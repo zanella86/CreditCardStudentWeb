@@ -1,6 +1,6 @@
-package com.fiap.onescjr.creditcardintegrator.config;
+package com.fiap.onescjr.creditcardstudentweb.config;
 
-import com.fiap.onescjr.creditcardintegrator.mapper.StudentMapper;
+import com.fiap.onescjr.creditcardstudentweb.mapper.StudentMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
