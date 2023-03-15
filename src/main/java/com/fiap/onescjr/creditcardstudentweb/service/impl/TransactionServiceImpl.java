@@ -10,10 +10,7 @@ import com.fiap.onescjr.creditcardstudentweb.service.TransactionService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,12 +45,20 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Optional<TransactionDTO> get(Long id) throws NoSuchElementException {
-        return Optional.ofNullable(transactionMapper.convertEntityToDTO(transactionRepository.getReferenceById(id)));
+        var transaction = transactionRepository.getReferenceById(id);
+        if(transaction == null)
+            Optional.empty();
+        return Optional.ofNullable(transactionMapper.convertEntityToDTO(transaction));
     }
 
 
     @Override
     public List<TransactionDTO> list(Long studentId, LocalDateTime initial, LocalDateTime end) {
+        var transactions = transactionRepository.listByStudent(studentId, initial, end);
+
+        if(Objects.isNull(transactions) || transactions.isEmpty())
+            return new ArrayList<>();
+
         return transactionRepository.listByStudent(studentId, initial, end)
                 .stream()
                 .map(transactionMapper::convertEntityToDTO)
@@ -63,6 +68,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void delete(Long id) {
         TransactionEntity transaction = transactionRepository.getReferenceById(id);
+        if(Objects.isNull(transaction))
+            throw new NoSuchElementException("Transaction not found");
         transactionRepository.delete(transaction);
     }
 
