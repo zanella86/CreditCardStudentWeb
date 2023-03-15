@@ -17,11 +17,7 @@ public interface TransactionService {
 
     Optional<TransactionDTO> get(Long id) throws NoSuchElementException;
 
-    List<TransactionDTO> list();
-
-    List<TransactionDTO> list(LocalDateTime initial, LocalDateTime end);
-
-    List<TransactionDTO> listByStudent(Long studentId, LocalDateTime initial, LocalDateTime end);
+    List<TransactionDTO> list(Long studentId, LocalDateTime initial, LocalDateTime end);
 
     @Transactional
     void delete(Long id);

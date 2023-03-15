@@ -3,11 +3,14 @@ package com.fiap.onescjr.creditcardstudentweb.mapper;
 import com.fiap.onescjr.creditcardstudentweb.dto.TransactionDTO;
 import com.fiap.onescjr.creditcardstudentweb.entity.StudentEntity;
 import com.fiap.onescjr.creditcardstudentweb.entity.TransactionEntity;
+import org.springframework.stereotype.Component;
 
 
-public final class TransactionMapper {  // TODO: Considerar implementar a interface "Mapper<D, E>"
+@Component
+public class TransactionMapper implements Mapper<TransactionDTO, TransactionEntity> {
 
-    public static TransactionEntity convertDTOToEntity(TransactionDTO dto) {
+    @Override
+    public TransactionEntity convertDTOToEntity(TransactionDTO dto) {
         return TransactionEntity.builder()
                 .id(dto.getId())
                 .date(dto.getDate())
@@ -16,18 +19,19 @@ public final class TransactionMapper {  // TODO: Considerar implementar a interf
                 .build();
     }
 
-    public static TransactionEntity convertDTOToEntity(TransactionDTO dto, StudentEntity student) {
+    public TransactionEntity convertDTOToEntity(TransactionDTO dto, StudentEntity student) {
         var transaction = convertDTOToEntity(dto);
         transaction.setStudent(student);
         return transaction;
     }
 
-
-    public static TransactionDTO convertEntityToDTO(TransactionEntity entity) {
+    @Override
+    public TransactionDTO convertEntityToDTO(TransactionEntity entity) {
         return TransactionDTO.builder()
                 .id(entity.getId())
                 .date(entity.getDate())
                 .purchaseDescription(entity.getPurchaseDescription())
+                .value(entity.getValue())
                 .studentId(entity.getStudent().getId())
                 .build();
     }
