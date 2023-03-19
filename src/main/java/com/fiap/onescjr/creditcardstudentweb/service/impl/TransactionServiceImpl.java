@@ -39,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO update(Long id, TransactionDTO transactionDTO) throws NoSuchElementException {
         TransactionEntity transaction = transactionRepository.getReferenceById(id);
         Optional.ofNullable(transaction).orElseThrow(() -> {
-            throw new NoSuchElementException("");
+            throw new NoSuchElementException("Transaction not found");
         });
 
         TransactionEntity entity = transactionRepository.save(updateValues(transaction, transactionDTO, getStudent(transactionDTO)));

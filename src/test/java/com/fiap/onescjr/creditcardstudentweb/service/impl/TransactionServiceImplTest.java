@@ -51,18 +51,36 @@ class TransactionServiceImplTest {
 
     @Test
     void testUpdate() {
-        when(transactionMapper.convertEntityToDTO(any())).thenReturn(null);
+        when(transactionMapper.convertEntityToDTO(any())).thenReturn(getDTO());
+        when(transactionRepository.getReferenceById(anyLong())).thenReturn(getEntity());
+        when(transactionRepository.save(any())).thenReturn(getEntity());
+        when(studentRepository.getReferenceById(anyLong())).thenReturn(getStudentEntity());
 
-        TransactionDTO result = transactionServiceImpl.update(Long.valueOf(1), null);
-        assertEquals(null, result);
+        TransactionDTO result = transactionServiceImpl.update(anyLong(), getDTO());
+
+        verify(transactionRepository, times(1)).getReferenceById(anyLong());
+        verify(transactionRepository, times(1)).save(any());
+        verify(transactionMapper, times(1)).convertEntityToDTO(any());
+    }
+
+    @Test
+    void testUpdateThrowTransactionNotFound() {
+        when(transactionRepository.getReferenceById(anyLong())).thenReturn(null);
+
+        var exception = assertThrows(NoSuchElementException.class, () -> transactionServiceImpl.update(anyLong(), getDTO()));
+
+        assertEquals("Transaction not found", exception.getMessage());
     }
 
     @Test
     void testGet() {
-        when(transactionMapper.convertEntityToDTO(any())).thenReturn(null);
+        when(transactionMapper.convertEntityToDTO(any())).thenReturn(getDTO());
+        when(transactionRepository.getReferenceById(anyLong())).thenReturn(getEntity());
 
-        Optional<TransactionDTO> result = transactionServiceImpl.get(Long.valueOf(1));
-        assertEquals(null, result);
+        Optional<TransactionDTO> result = transactionServiceImpl.get(any());
+
+        verify(transactionMapper, times(1)).convertEntityToDTO(any());
+        verify(transactionRepository, times(1)).getReferenceById(any());
     }
 
     @Test
@@ -103,7 +121,12 @@ class TransactionServiceImplTest {
 
     @Test
     void testDelete() {
+        when(transactionRepository.getReferenceById(anyLong())).thenReturn(getEntity());
+
         transactionServiceImpl.delete(Long.valueOf(1));
+
+        verify(transactionRepository, times(1)).getReferenceById(anyLong());
+        verify(transactionRepository, times(1)).delete(any());
     }
 
     @Test
