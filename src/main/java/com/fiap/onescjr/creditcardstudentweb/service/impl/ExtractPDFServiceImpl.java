@@ -1,26 +1,18 @@
 package com.fiap.onescjr.creditcardstudentweb.service.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.fiap.onescjr.creditcardstudentweb.dto.ReportDTO;
-import com.fiap.onescjr.creditcardstudentweb.dto.StudentDTO;
 import com.fiap.onescjr.creditcardstudentweb.dto.TransactionDTO;
-import com.fiap.onescjr.creditcardstudentweb.repository.StudentRepository;
-import com.fiap.onescjr.creditcardstudentweb.repository.TransactionRepository;
 import com.fiap.onescjr.creditcardstudentweb.service.ExtractPDFService;
 import com.fiap.onescjr.creditcardstudentweb.service.StudentService;
 import com.fiap.onescjr.creditcardstudentweb.service.TransactionService;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 
 @Service
 public class ExtractPDFServiceImpl implements ExtractPDFService {
@@ -35,6 +27,7 @@ public class ExtractPDFServiceImpl implements ExtractPDFService {
 
     @Override
     public byte[] createExtractPDF(ReportDTO reportDTO) throws DocumentException {
+
         // cria um objeto Document para adicionar conteúdo ao PDF
         Document document = new Document();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -50,6 +43,9 @@ public class ExtractPDFServiceImpl implements ExtractPDFService {
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
 
+        if (!reportDTO.getTransactions().isEmpty()){
+        var valueTransactions = reportDTO.getTransactions().stream().map((dto)->dto.getValue()).reduce((total,value)->total.add(value)).get();
+        var numTransactions = reportDTO.getTransactions().size();
         // adiciona uma tabela com as informações de transações dos alunos
         PdfPTable table = new PdfPTable(3);
         table.setWidthPercentage(100);
@@ -87,9 +83,24 @@ public class ExtractPDFServiceImpl implements ExtractPDFService {
             table.addCell(dataCell);
             table.addCell(valorCell);
         }
+            Paragraph qtdTransactions = new Paragraph("Quantidade de transações: "+ numTransactions, new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL));
+            qtdTransactions.setAlignment(Element.ALIGN_CENTER);
+            document.add(qtdTransactions);
 
-        // adiciona a tabela ao documento
-        document.add(table);
+            // adiciona a tabela ao documento
+            document.add(table);
+
+            Paragraph total = new Paragraph("Valor Total: "+ valueTransactions, new Font(Font.FontFamily.HELVETICA, 14, Font.NORMAL));
+            total.setAlignment(Element.ALIGN_CENTER);
+            document.add(total);
+
+
+        }else {
+            Paragraph mensagemSemTransacoes = new Paragraph("Não existem transações do periodo selecionado ");
+            mensagemSemTransacoes.setAlignment(Element.ALIGN_CENTER);
+            document.add(mensagemSemTransacoes);
+        }
+
 
         // fecha o documento
         document.close();
