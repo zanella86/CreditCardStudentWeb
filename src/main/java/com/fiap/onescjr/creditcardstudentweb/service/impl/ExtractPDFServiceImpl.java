@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ExtractPDFServiceImpl implements ExtractPDFService {
@@ -112,13 +116,13 @@ public class ExtractPDFServiceImpl implements ExtractPDFService {
     @Override
     public byte[] extractPDF(Long studentId, LocalDateTime initial, LocalDateTime end) throws DocumentException {
         var student = studentService.select(studentId);
-        if (student.isEmpty()){
-            throw new RuntimeException();
+        if (Objects.isNull(student) || student.isEmpty()){
+            throw new NoSuchElementException("Student not found");
         }
         var transactions = transactionService.list(studentId, initial, end);
         var reportDTO = ReportDTO.builder()
                 .studentName(student.get().getName())
-                .transactions(transactions)
+                .transactions(Optional.ofNullable(transactions).orElse(new ArrayList<>()))
                 .build();
        return createExtractPDF(reportDTO);
     }
