@@ -1,7 +1,17 @@
-package com.fiap.onescjr.creditcardstudentweb.extract;
+package com.fiap.onescjr.creditcardstudentweb.service.impl;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fiap.onescjr.creditcardstudentweb.dto.ReportDTO;
+import com.fiap.onescjr.creditcardstudentweb.dto.StudentDTO;
+import com.fiap.onescjr.creditcardstudentweb.dto.TransactionDTO;
+import com.fiap.onescjr.creditcardstudentweb.repository.StudentRepository;
+import com.fiap.onescjr.creditcardstudentweb.repository.TransactionRepository;
+import com.fiap.onescjr.creditcardstudentweb.service.ExtractPDFService;
+import com.fiap.onescjr.creditcardstudentweb.service.StudentService;
+import com.fiap.onescjr.creditcardstudentweb.service.TransactionService;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -10,10 +20,21 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.springframework.stereotype.Service;
 
-public class ExtractPDF {
+@Service
+public class ExtractPDFServiceImpl implements ExtractPDFService {
 
-    public static byte[] createExtractPDF(List<String> student) throws DocumentException {
+    private StudentService studentService;
+    private TransactionService transactionService;
+
+    public ExtractPDFServiceImpl(StudentService studentService, TransactionService transactionService) {
+        this.studentService = studentService;
+        this.transactionService = transactionService;
+    }
+
+    @Override
+    public byte[] createExtractPDF(ReportDTO reportDTO) throws DocumentException {
         // cria um objeto Document para adicionar conteúdo ao PDF
         Document document = new Document();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -25,7 +46,7 @@ public class ExtractPDF {
         document.open();
 
         // adiciona um parágrafo com o título do extrato
-        Paragraph title = new Paragraph("Extrato de Transações\n\n", new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
+        Paragraph title = new Paragraph("Extrato de Transações\n\nNome estudante: "+ reportDTO.getStudentName(), new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
 
@@ -36,7 +57,7 @@ public class ExtractPDF {
         table.setSpacingAfter(20f);
 
         // cria as células do cabeçalho da tabela
-        PdfPCell alunoHeader = new PdfPCell(new Paragraph("Aluno", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+        PdfPCell alunoHeader = new PdfPCell(new Paragraph("Descrição", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
         alunoHeader.setHorizontalAlignment(Element.ALIGN_CENTER);
         alunoHeader.setVerticalAlignment(Element.ALIGN_MIDDLE);
         PdfPCell dataHeader = new PdfPCell(new Paragraph("Data", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
@@ -52,13 +73,13 @@ public class ExtractPDF {
         table.addCell(valorHeader);
 
         // preenche a tabela com as informações de transações dos alunos
-        for (String aluno : student) {
+        for (TransactionDTO transaction : reportDTO.getTransactions()) {
             // adiciona uma linha com as informações de transação do aluno
-            PdfPCell alunoCell = new PdfPCell(new Paragraph(aluno, new Font(Font.FontFamily.HELVETICA, 10)));
+            PdfPCell alunoCell = new PdfPCell(new Paragraph(transaction.getPurchaseDescription(), new Font(Font.FontFamily.HELVETICA, 10)));
             alunoCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            PdfPCell dataCell = new PdfPCell(new Paragraph("01/01/2022", new Font(Font.FontFamily.HELVETICA, 10)));
+            PdfPCell dataCell = new PdfPCell(new Paragraph(transaction.getDate().toString(), new Font(Font.FontFamily.HELVETICA, 10)));
             dataCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            PdfPCell valorCell = new PdfPCell(new Paragraph("R$ 10,00", new Font(Font.FontFamily.HELVETICA, 10)));
+            PdfPCell valorCell = new PdfPCell(new Paragraph(transaction.getValue().toString(), new Font(Font.FontFamily.HELVETICA, 10)));
             valorCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
             // adiciona as células à linha
@@ -76,4 +97,19 @@ public class ExtractPDF {
         // retorna os bytes do PDF
         return byteArrayOutputStream.toByteArray();
     }
+
+    @Override
+    public byte[] extractPDF(Long studentId, LocalDateTime initial, LocalDateTime end) throws DocumentException {
+        var student = studentService.select(studentId);
+        if (student.isEmpty()){
+            throw new RuntimeException();
+        }
+        var transactions = transactionService.list(studentId, initial, end);
+        var reportDTO = ReportDTO.builder()
+                .studentName(student.get().getName())
+                .transactions(transactions)
+                .build();
+       return createExtractPDF(reportDTO);
+    }
+
 }
