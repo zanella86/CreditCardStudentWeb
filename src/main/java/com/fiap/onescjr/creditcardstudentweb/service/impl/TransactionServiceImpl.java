@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
     public Optional<TransactionDTO> get(Long id) throws NoSuchElementException {
         var transaction = transactionRepository.getReferenceById(id);
         if (transaction == null)
-            Optional.empty();
+            return Optional.empty();
         return Optional.ofNullable(transactionMapper.convertEntityToDTO(transaction));
     }
 

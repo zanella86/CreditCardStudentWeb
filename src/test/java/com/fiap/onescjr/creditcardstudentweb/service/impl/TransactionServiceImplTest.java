@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ class TransactionServiceImplTest {
     TransactionRepository transactionRepository;
     @Mock
     StudentRepository studentRepository;
-    @Mock
+    @Spy
     TransactionMapper transactionMapper;
     @InjectMocks
     TransactionServiceImpl transactionServiceImpl;
@@ -38,20 +39,17 @@ class TransactionServiceImplTest {
 
     @Test
     void testInsert() {
-        when(transactionMapper.convertDTOToEntity(any()))
-                .thenReturn(getEntity());
-        when(transactionMapper.convertEntityToDTO(any()))
-                .thenReturn(null);
+        when(transactionRepository.save(any())).thenReturn(getEntity());
         when(studentRepository.getReferenceById(anyLong()))
                 .thenReturn(getStudentEntity());
 
         TransactionDTO result = transactionServiceImpl.insert(getDTO());
-        assertEquals(null, result);
+
+        verify(transactionRepository, times(1)).save(any());
     }
 
     @Test
     void testUpdate() {
-        when(transactionMapper.convertEntityToDTO(any())).thenReturn(getDTO());
         when(transactionRepository.getReferenceById(anyLong())).thenReturn(getEntity());
         when(transactionRepository.save(any())).thenReturn(getEntity());
         when(studentRepository.getReferenceById(anyLong())).thenReturn(getStudentEntity());
@@ -73,11 +71,20 @@ class TransactionServiceImplTest {
     }
 
     @Test
+    void testUpdateThrowStudentNotFound() {
+        when(transactionRepository.getReferenceById(anyLong())).thenReturn(getEntity());
+        when(studentRepository.getReferenceById(anyLong())).thenReturn(null);
+
+        var exception = assertThrows(NoSuchElementException.class, () -> transactionServiceImpl.update(anyLong(), getDTO()));
+
+        assertEquals("Student not found", exception.getMessage());
+    }
+
+    @Test
     void testGet() {
-        when(transactionMapper.convertEntityToDTO(any())).thenReturn(getDTO());
         when(transactionRepository.getReferenceById(anyLong())).thenReturn(getEntity());
 
-        Optional<TransactionDTO> result = transactionServiceImpl.get(any());
+        Optional<TransactionDTO> result = transactionServiceImpl.get(anyLong());
 
         verify(transactionMapper, times(1)).convertEntityToDTO(any());
         verify(transactionRepository, times(1)).getReferenceById(any());
@@ -86,7 +93,6 @@ class TransactionServiceImplTest {
     @Test
     void testGetEmptyReturn() {
         when(transactionRepository.getReferenceById(any())).thenReturn(null);
-        when(transactionMapper.convertEntityToDTO(any())).thenReturn(null);
 
         Optional<TransactionDTO> result = transactionServiceImpl.get(Long.valueOf(1));
         assertEquals(Optional.empty(), result);
@@ -95,7 +101,6 @@ class TransactionServiceImplTest {
     @Test
     void testList() {
         when(transactionRepository.listByStudent(anyLong(), any(), any())).thenReturn(List.of(getEntity()));
-        when(transactionMapper.convertEntityToDTO(any())).thenReturn(getDTO());
 
         List<TransactionDTO> result = transactionServiceImpl
                 .list(Long.valueOf(1),

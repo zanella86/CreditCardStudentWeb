@@ -6,9 +6,8 @@ import com.fiap.onescjr.creditcardstudentweb.repository.StudentRepository;
 import com.fiap.onescjr.creditcardstudentweb.service.StudentService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import javax.swing.text.html.Option;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,23 +38,27 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDTO update(Long id, StudentDTO studentDTO) throws NoSuchElementException {
-        var studentEntity = studentRepository.findById(id).orElseThrow();
+        var studentEntity = studentRepository.findById(id).orElseThrow( () -> new NoSuchElementException("Student not found"));
         studentEntity.setName(studentDTO.getName());
         return studentMapper.convertEntityToDTO(studentRepository.save(studentEntity));
     }
 
     @Override
     public Optional<StudentDTO> select(Long id) throws NoSuchElementException {
-        return Optional.ofNullable(
-                studentMapper.convertEntityToDTO(
-                        studentRepository.findById(id).orElseThrow()
-                )
-        );
+        var student = studentRepository.findById(id);
+        if(student.isEmpty())
+            return Optional.empty();
+
+        return Optional.of(studentMapper.convertEntityToDTO(student.get()));
     }
 
     @Override
     public List<StudentDTO> list() {
-        return studentRepository.findAll()
+        var students = studentRepository.findAll();
+        if(Objects.isNull(students))
+            return new ArrayList<>();
+
+        return students
                 .stream()
                 .map(studentMapper::convertEntityToDTO)
                 .collect(Collectors.toList());
@@ -63,7 +66,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void delete(Long id) {
-        studentRepository.deleteById(id);
+        var student = studentRepository.getReferenceById(id);
+        if(Objects.isNull(student))
+            throw new NoSuchElementException("Student not found");
+        studentRepository.delete(student);
     }
 
 }
