@@ -11,8 +11,8 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<TransactionEntity, Long> {
 
     @Query(value = "select te from TransactionEntity te where te.date between :initialDate and :endDate")
-    List<TransactionEntity> list(LocalDateTime initialDate, LocalDateTime endDate);
+    List<TransactionEntity> list(String initialDate, String endDate);
 
-    @Query(value = "select te from TransactionEntity te where te.date between :initial and :end and te.student.id = :studentId")
-    List<TransactionEntity> listByStudent(Long studentId, LocalDateTime initial, LocalDateTime end);
+    @Query(value = "select * from tb_transaction te where te.date between :initial and :end and te.id_student = :studentId", nativeQuery = true)
+    List<TransactionEntity> listByStudent(Long studentId, String initial, String end);
 }

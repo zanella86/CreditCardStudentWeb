@@ -10,6 +10,7 @@ import com.fiap.onescjr.creditcardstudentweb.service.TransactionService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDTO update(Long id, TransactionDTO transactionDTO) throws NoSuchElementException {
         TransactionEntity transaction = transactionRepository.getReferenceById(id);
-        Optional.ofNullable(transaction).orElseThrow(() -> { throw new NoSuchElementException("");});
+        Optional.ofNullable(transaction).orElseThrow(() -> {
+            throw new NoSuchElementException("");
+        });
 
         TransactionEntity entity = transactionRepository.save(updateValues(transaction, transactionDTO, getStudent(transactionDTO)));
         return transactionMapper.convertEntityToDTO(entity);
@@ -46,7 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Optional<TransactionDTO> get(Long id) throws NoSuchElementException {
         var transaction = transactionRepository.getReferenceById(id);
-        if(transaction == null)
+        if (transaction == null)
             Optional.empty();
         return Optional.ofNullable(transactionMapper.convertEntityToDTO(transaction));
     }
@@ -54,21 +57,18 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDTO> list(Long studentId, LocalDateTime initial, LocalDateTime end) {
-        var transactions = transactionRepository.listByStudent(studentId, initial, end);
 
-        if(Objects.isNull(transactions) || transactions.isEmpty())
-            return new ArrayList<>();
-
-        return transactionRepository.listByStudent(studentId, initial, end)
-                .stream()
-                .map(transactionMapper::convertEntityToDTO)
-                .collect(Collectors.toList());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        System.out.println("data formatada: " + formatter.format(initial));
+        var transactions = transactionRepository.listByStudent(studentId, formatter.format(initial), formatter.format(end));
+        if (Objects.isNull(transactions) || transactions.isEmpty()) return new ArrayList<>();
+        return transactions.stream().map(transactionMapper::convertEntityToDTO).collect(Collectors.toList());
     }
 
     @Override
     public void delete(Long id) {
         TransactionEntity transaction = transactionRepository.getReferenceById(id);
-        if(Objects.isNull(transaction))
+        if (Objects.isNull(transaction))
             throw new NoSuchElementException("Transaction not found");
         transactionRepository.delete(transaction);
     }
@@ -76,11 +76,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     private StudentEntity getStudent(TransactionDTO transactionDTO) {
         var student = studentRepository.getReferenceById(transactionDTO.getStudentId());
-        if(Objects.isNull(student))
+        if (Objects.isNull(student))
             throw new NoSuchElementException("Student not found");
 
         return student;
     }
+
     private TransactionEntity prepareTransactionToSave(TransactionDTO transactionDTO, StudentEntity student) {
         var transaction = transactionMapper.convertDTOToEntity(transactionDTO);
         transaction.setStudent(student);
